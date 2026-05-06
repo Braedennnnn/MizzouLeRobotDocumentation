@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeRobot AI Set Up Guide</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
+            --text-color: #333;
+            --accent-color: #2563eb;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border-color: #e5e7eb;
+            --info-bg: #eff6ff;
+            --info-border: #3b82f6;
+            --warn-bg: #fffbeb;
+            --warn-border: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            color: #111;
+        }
+
+        h2 {
+            margin-top: 2em;
+            color: var(--accent-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        h3 {
+            margin-top: 1.5em;
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            background: #f0f0f0;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        blockquote {
+            margin: 1.5em 0;
+            padding: 15px 20px;
+            border-left: 5px solid var(--info-border);
+            background: var(--info-bg);
+        }
+
+        blockquote strong {
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+
+        blockquote.important {
+            border-left-color: var(--warn-border);
+            background: var(--warn-bg);
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #666;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 2em 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>LeRobot AI Set Up</h1>
+
+    <h2>Set Up Environment (ensure you run on Linux)</h2>
+    <p>Choose a root folder and in the terminal run the following commands in order:</p>
+    <pre><code>wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+
+bash Miniforge3-$(uname)-$(uname -m).sh
+
+conda create -y -n lerobot python=3.12
+
+conda activate lerobot
+
+conda install ffmpeg -c conda-forge
+
+git clone https://github.com/huggingface/lerobot.git
+
+cd lerobot
+
+pip install -e ".[core_scripts]"
+
+pip install -e ".[training]"
+
+pip install -e ".[all]"
+
+pip install lerobot
+
+pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
+
+    <h2>Construct Arm</h2>
+    <p>Follow detailed tutorial here: <a href="https://huggingface.co/docs/lerobot/main/en/so101" target="_blank">https://huggingface.co/docs/lerobot/main/en/so101</a></p>
+    <p><em>(This construction tutorial is SO-101 arm specific)</em></p>
+
+    <hr>
+
+    <h2>Test Arms with Teleoperation (optional)</h2>
+    <pre><code>lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/tty.usbmodem58760431541     --robot.id=my_awesome_follower_arm     --teleop.type=so101_leader     --teleop.port=/dev/tty.usbmodem58760431551     --teleop.id=my_awesome_leader_arm</code><button class="copy-btn">Copy</button></pre>
+    <p><strong>Note:</strong> Text like this is meant to be modified to fit your personal environment.</p>
+
+    <hr>
+
+    <h2>Create HuggingFace Account and Link</h2>
+    <p>To obtain token, make account and click on access tokens under account drop down in top right corner of website.</p>
+    <pre><code>hf auth login --token ${HUGGINGFACE_TOKEN} --add-to-git-credential</code><button class="copy-btn">Copy</button></pre>
+    <blockquote>
+        <strong>INFO</strong>
+        Huggingface-hub should be installed via the environment set-up, but if not you may need to install it manually to run this command
+    </blockquote>
+
+    <hr>
+
+    <h2>Record Dataset</h2>
+    <pre><code>lerobot-record     --robot.type=so101_follower     --robot.port=/dev/tty.usbmodem4210431551     --robot.id=my_awesome_follower_arm     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/tty.usbmodem58760431551     --teleop.id=my_awesome_leader_arm     --dataset.repo_id=${HF_USER}/record-test     --dataset.num_episodes=5     --dataset.single_task="Grab the black cube"</code><button class="copy-btn">Copy</button></pre>
+    <p>Where each variable in the command above needs to be adapted to your environment. Find the robot ports by using the command <code>lerobot-find-port</code> and the <code>robot.id</code> / <code>teleop.id</code> should be the id you customized during configuration (it most likely points to the YAML configuration file).</p>
+    <p>The <code>repo.id</code> should correspond to your huggingface username and a repo you wish to create. For example, my username is Basr88, so my <code>repo.id</code> may be <code>Basr88/My_new_dataset</code>.</p>
+    
+    <blockquote class="important">
+        <strong>IMPORTANT</strong>
+        LeRobot’s ACT model takes a minimum of 640x480 camera input. Anything less and the model will not function properly. This is important information for choosing which cameras to utilize. In addition, the specified camera fps directly determines robot movement speed as the model runs at a default 30 fps, meaning if a 15 fps is specified in the camera, it will cause the robot’s movements to be twice as fast as the training input.
+    </blockquote>
+
+    <hr>
+
+    <h2>Training Tips</h2>
+    <p>When choosing tasks and camera angles for the AI to learn, the methodology for choosing a valid task is deciding whether or not it can be performed by a human using <strong>ONLY</strong> the provided camera input. If not, an additional camera angle or change in positioning may be needed for a successful model.</p>
+    <p>Two cameras are almost always better than one, as they provide more depth knowledge and situational awareness, however this comes at the cost of increased training time.</p>
+    <p>It can be beneficial to split training sessions into 25 episode increments. Anything more and the recording program begins to slow down substantially.</p>
+    
+    <p>Datasets can be merged using the CLI command:</p>
+    <pre><code>lerobot-edit-dataset     --repo_id lerobot/pusht_merged     --operation.type merge     --operation.repo_ids "['lerobot/pusht_train', 'lerobot/pusht_val']"</code><button class="copy-btn">Copy</button></pre>
+
+    <p>When trying to build a resilient model, it is important to introduce variability to anything that is not important during training. This includes altering the background, adding new items to a table, etc.</p>
+    <p>For example, if there is a sticky note on the wall, it may be that the model assigns a high weight to that sticky note because it never realizes the sticky note isn’t important. Once trained, if the sticky note is removed, however, the model would fail in this scenario.</p>
+
+    <hr>
+
+    <h2>Accessing Dataset</h2>
+    <p>To access the recorded dataset, LeRobot automatically saves it into the computers <code>/.cache</code> folder under huggingface and the <code>repo.id</code> specified. You can either move this file for training manually or upload it to the HuggingFace Hub.</p>
+    <p>This process is automatic if trained while connected to WiFi, however can be done manually using:</p>
+    <pre><code>hf upload ${HF_USER}/record-test ~/.cache/huggingface/lerobot/{repo-id} --repo-type dataset</code><button class="copy-btn">Copy</button></pre>
+
+    <hr>
+
+    <h2>Training Model from Dataset</h2>
+    <pre><code>lerobot-train   --dataset.repo_id=${HF_USER}/so101_test   --policy.type=act   --output_dir=outputs/train/act_so101_test   --job_name=act_so101_test   --policy.device=cuda   --wandb.enable=false   --policy.repo_id=${HF_USER}/my_policy</code><button class="copy-btn">Copy</button></pre>
+
+    <h3>Editable fields are:</h3>
+    <ul>
+        <li><strong>Dataset.repo_id</strong>: The repo.id of your trained dataset (can be local file directory or repo.id from Huggingface Hub)</li>
+        <li><strong>Output_dir</strong>: The directory for final model output to be stored</li>
+        <li><strong>Job_name (Optional)</strong>: Name for job in terminal</li>
+        <li><strong>Wandb.enable (Optional)</strong>: If true, must link to personal wandb account to get real-time training weights and updates</li>
+        <li><strong>Policy.repo_id</strong>: The desired repo.id for the final trained model.</li>
+    </ul>
+
+    <blockquote>
+        <strong>INFO</strong>
+        While the default training steps are 100000, you can change this by adding the line <code>--steps=120000</code>. The more steps given, the further the model adapts to the dataset data. Too little and the AI cannot perform inference, too much and the AI cannot adapt to new scenarios.<br><br>
+        Sticking to 100000 steps seems to be optimal in our testing.
+    </blockquote>
+
+    <hr>
+
+    <h2>Running the Model</h2>
+    <pre><code>lerobot-rollout   --strategy.type=base   --policy.path=${HF_USER}/my_policy   --robot.type=so100_follower   --robot.port=/dev/ttyACM1   --robot.cameras="{ front: {type: opencv, index_or_path: /dev/video10, width: 640, height: 480, fps: 30}}"   --task="Put lego brick into the transparent box"   --duration=60</code><button class="copy-btn">Copy</button></pre>
+    <p>Match these values to the values of the dataset and provide the <code>policy.path</code> as the trained model’s <code>repo.id</code>. This should run inference and you can evaluate the trained model.</p>
+
+    <hr>
+
+    <h2>IMPORTANT SIDE NOTE</h2>
+    <p>While making this documentation, the LeRobot library and online documentation has changed. It is important to reference the online documentation alongside this one to ensure up-to-date information. This also means that most online forums and AI will provide out-of-date information, which is something we ran into a lot. Once you have a working LeRobot environment, try to keep it self-contained and rely on external computers as little as possible. Versioning conflicts with LeRobot are a mess.</p>
+</div>
+
+<script>
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const code = button.parentElement.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                setTimeout(() => {
+                    button.innerText = originalText;
+                }, 2000);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
