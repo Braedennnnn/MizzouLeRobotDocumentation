@@ -17,6 +17,16 @@
             --info-border: #3b82f6;
             --warn-bg: #fffbeb;
             --warn-border: #f59e0b;
+
+            /* Variable Colors */
+            --color-r-port: #ff79c6; 
+            --color-t-port: #8be9fd; 
+            --color-r-id: #50fa7b;   
+            --color-t-id: #ffb86c;   
+            --color-hf-user: #bd93f9;
+            --color-ds-name: #f1fa8c;
+            --color-task: #ff5555;
+            --color-policy: #8be9fd;
         }
 
         body {
@@ -29,7 +39,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             background: var(--container-bg);
             padding: 40px;
@@ -37,109 +47,204 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-            color: #111;
+        /* Toggle Switch Styling */
+        .tutorial-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            gap: 15px;
+            top: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        h2 {
-            margin-top: 2em;
-            color: var(--accent-color);
-            border-left: 4px solid var(--accent-color);
-            padding-left: 15px;
-        }
-
-        h3 {
-            margin-top: 1.5em;
-        }
-
-        code {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            background: #f0f0f0;
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        pre {
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
+        .switch {
             position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
         }
 
-        pre code {
-            background: transparent;
-            padding: 0;
-            color: inherit;
-        }
+        .switch input { opacity: 0; width: 0; height: 0; }
 
-        blockquote {
-            margin: 1.5em 0;
-            padding: 15px 20px;
-            border-left: 5px solid var(--info-border);
-            background: var(--info-bg);
-        }
-
-        blockquote strong {
-            display: block;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 1px;
-        }
-
-        blockquote.important {
-            border-left-color: var(--warn-border);
-            background: var(--warn-bg);
-        }
-
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .copy-btn {
+        .slider {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #444;
-            color: #fff;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: .4s;
+            border-radius: 34px;
         }
 
-        .copy-btn:hover {
-            background: #666;
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px; width: 26px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
         }
 
-        hr {
-            border: 0;
-            border-top: 1px solid var(--border-color);
-            margin: 2em 0;
+        input:checked + .slider { background-color: var(--accent-color); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .toggle-label { font-weight: bold; font-size: 1.1em; letter-spacing: 0.5px; }
+
+        h1 { border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; color: #111; }
+        h2 { margin-top: 2em; color: var(--accent-color); border-left: 4px solid var(--accent-color); padding-left: 15px; }
+        h3 { margin-top: 1.5em; }
+
+        .headings {
+            font-size: 1.1em;
+            font-style: italic;
+            color: #4b5563;
+            background: #f9fafb;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #d1d5db;
+            margin-bottom: 20px;
         }
 
-        ul li {
-            margin-bottom: 10px;
+        /* UPDATED: Contextual Input Styling with Gradient Border */
+        .local-config {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none; /* Toggled by JS */
+            flex-wrap: wrap;
+            gap: 15px;
+            position: relative;
+            
+            /* The 5px Gradient Border Hack */
+            border: 5px solid transparent;
+            background: linear-gradient(#f8fafc, #f8fafc) padding-box, 
+                        linear-gradient(to right, #ff416c, #ff4b2b, #a855f7) border-box;
         }
+
+        .input-group { display: flex; flex-direction: column; min-width: 200px; flex: 1; }
+        .input-group label { font-weight: 700; font-size: 0.75em; text-transform: uppercase; color: #6b7280; margin-bottom: 5px; }
+        .input-group input {
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        /* Syntax Highlighting */
+        .hl-r-port { color: var(--color-r-port); font-weight: bold; }
+        .hl-t-port { color: var(--color-t-port); font-weight: bold; }
+        .hl-r-id { color: var(--color-r-id); font-weight: bold; }
+        .hl-t-id { color: var(--color-t-id); font-weight: bold; }
+        .hl-hf-user { color: var(--color-hf-user); font-weight: bold; }
+        .hl-ds-name { color: var(--color-ds-name); font-weight: bold; }
+        .hl-task { color: var(--color-task); font-weight: bold; }
+        .hl-policy { color: var(--color-policy); font-weight: bold; }
+
+        code { font-family: "SFMono-Regular", Consolas, monospace; background: #f0f0f0; padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; }
+        pre { background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; overflow-x: auto; position: relative; line-height: 1.6; }
+        pre code { background: transparent; padding: 0; color: inherit; }
+
+        blockquote { margin: 1.5em 0; padding: 15px 20px; border-left: 5px solid var(--info-border); background: var(--info-bg); }
+        blockquote strong { display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; }
+        blockquote.important { border-left-color: var(--warn-border); background: var(--warn-bg); }
+
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #444; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .copy-btn:hover { background: #666; }
+
+        hr { border: 0; border-top: 1px solid var(--border-color); margin: 2em 0; }
+        ul li { margin-bottom: 10px; }
+        .int-head {
+    font-weight: bold;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    width: 100%; /* Ensures it sits above the inputs */
+    
+    /* Gradient Text Logic */
+    background: linear-gradient(to right, #ff416c, #ff4b2b, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+#tutorial-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    max-width: 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 2px solid var(--accent-color);
+    animation: slideIn 0.5s ease-out;
+}
+
+.popup-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.popup-content h3 {
+    margin-top: 0;
+    font-size: 1.1em;
+    color: var(--accent-color);
+}
+
+.popup-content p {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+#close-popup {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#close-popup:hover {
+    opacity: 0.9;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="tutorial-toggle-container">
+        <span class="toggle-label">INTERACTIVE WALKTHROUGH</span>
+        <label class="switch">
+            <input type="checkbox" id="mode-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <p>This is a specialized walkthrough based on LeRobot's <a href="https://huggingface.co/docs/lerobot/main/en/il_robots">Immitation Learning tutorial</a>.</p>
     <h1>LeRobot AI Set Up</h1>
 
     <h2>Set Up Environment (ensure you run on Linux)</h2>
+    <p class="headings">
+        In this section, we will take care of environment creation. This includes installation of conda environments, the creation of a lerobot conda environment, installation of ffmpeg and LeRobot libraries, and feetech motor controller libraries for arm motors.
+    </p>
     <p>Choose a root folder and in the terminal run the following commands in order:</p>
     <pre><code>wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
@@ -169,16 +274,44 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
     <p>Follow detailed tutorial here: <a href="https://huggingface.co/docs/lerobot/main/en/so101" target="_blank">https://huggingface.co/docs/lerobot/main/en/so101</a></p>
     <p><em>(This construction tutorial is SO-101 arm specific)</em></p>
 
+    <div class="local-config">
+        <p class="int-head">Add the values obtained via the external tutorial</p>
+        <div class="input-group"><label>Robot Port</label><input type="text" class="sync-input" data-var="r-port" value="/dev/ttyACM0"></div>
+        <div class="input-group"><label>Teleop Port</label><input type="text" class="sync-input" data-var="t-port" value="/dev/ttyACM1"></div>
+        <div class="input-group"><label>Robot ID</label><input type="text" class="sync-input" data-var="r-id" value="my_awesome_follower_arm"></div>
+        <div class="input-group"><label>Teleop ID</label><input type="text" class="sync-input" data-var="t-id" value="my_awesome_leader_arm"></div>
+    </div>
+
     <hr>
 
     <h2>Test Arms with Teleoperation (optional)</h2>
-    <pre><code>lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/tty.usbmodem58760431541     --robot.id=my_awesome_follower_arm     --teleop.type=so101_leader     --teleop.port=/dev/tty.usbmodem58760431551     --teleop.id=my_awesome_leader_arm</code><button class="copy-btn">Copy</button></pre>
-    <p><strong>Note:</strong> Text like this is meant to be modified to fit your personal environment.</p>
+    <p class="headings">
+        Here we will go over how to ensure the robot and its teleoperator are functioning and communicating correctly.
+    </p>
+    
+    <pre><code>lerobot-teleoperate \
+    --robot.type=so101_follower \
+    --robot.port=<span class="hl-r-port"></span> \
+    --robot.id=<span class="hl-r-id"></span> \
+    --teleop.type=so101_leader \
+    --teleop.port=<span class="hl-t-port"></span> \
+    --teleop.id=<span class="hl-t-id"></span></code><button class="copy-btn">Copy</button></pre>
+    <p><strong>Note:</strong> Colorful text like this is meant to be modified to fit your personal environment.</p>
 
     <hr>
 
     <h2>Create HuggingFace Account and Link</h2>
+    <p class="headings">
+        Making a HuggingFace account is important because HuggingFace is where all datasets and models created will be stored. 
+    </p>
     <p>To obtain token, make account and click on access tokens under account drop down in top right corner of website.</p>
+    
+    <div class="local-config">
+      <p class="int-head">Input your created HuggingFace account username</p>
+        <div class="input-group"><label>HF Username</label><input type="text" class="sync-input" data-var="hf-user" value="User"></div>
+        
+    </div>
+
     <pre><code>hf auth login --token ${HUGGINGFACE_TOKEN} --add-to-git-credential</code><button class="copy-btn">Copy</button></pre>
     <blockquote>
         <strong>INFO</strong>
@@ -188,9 +321,30 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
     <hr>
 
     <h2>Record Dataset</h2>
-    <pre><code>lerobot-record     --robot.type=so101_follower     --robot.port=/dev/tty.usbmodem4210431551     --robot.id=my_awesome_follower_arm     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/tty.usbmodem58760431551     --teleop.id=my_awesome_leader_arm     --dataset.repo_id=${HF_USER}/record-test     --dataset.num_episodes=5     --dataset.single_task="Grab the black cube"</code><button class="copy-btn">Copy</button></pre>
+    <p class="headings">
+        To train the model, we must first record a dataset of the task we want it to perform. This command begins the recording process. 
+    </p>
+
+    <div class="local-config">
+      <p class="int-head">Choose a dataset name and describe the task you are trying to train</p>
+        <div class="input-group"><label>Dataset Name</label><input type="text" class="sync-input" data-var="ds-name" value="record-test"></div>
+        <div class="input-group"><label>Task Description</label><input type="text" class="sync-input" data-var="task" value="Grab the black cube"></div>
+    </div>
+
+    <pre><code>lerobot-record \
+    --robot.type=so101_follower \
+    --robot.port=<span class="hl-r-port"></span> \
+    --robot.id=<span class="hl-r-id"></span> \
+    --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}" \
+    --teleop.type=so101_leader \
+    --teleop.port=<span class="hl-t-port"></span> \
+    --teleop.id=<span class="hl-t-id"></span> \
+    --dataset.repo_id=<span class="hl-hf-user"></span>/<span class="hl-ds-name"></span> \
+    --dataset.num_episodes=25 \
+    --dataset.single_task="<span class="hl-task"></span>"</code><button class="copy-btn">Copy</button></pre>
+    
     <p>Where each variable in the command above needs to be adapted to your environment. Find the robot ports by using the command <code>lerobot-find-port</code> and the <code>robot.id</code> / <code>teleop.id</code> should be the id you customized during configuration (it most likely points to the YAML configuration file).</p>
-    <p>The <code>repo.id</code> should correspond to your huggingface username and a repo you wish to create. For example, my username is Basr88, so my <code>repo.id</code> may be <code>Basr88/My_new_dataset</code>.</p>
+    <p>The <code>repo.id</code> should correspond to your huggingface username and a repo you wish to create. For example, if your username is <span class="hl-hf-user"></span>, your <code>repo.id</code> may be <code><span class="hl-hf-user"></span>/My_new_dataset</code>.</p>
     
     <blockquote class="important">
         <strong>IMPORTANT</strong>
@@ -202,10 +356,13 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
     <h2>Training Tips</h2>
     <p>When choosing tasks and camera angles for the AI to learn, the methodology for choosing a valid task is deciding whether or not it can be performed by a human using <strong>ONLY</strong> the provided camera input. If not, an additional camera angle or change in positioning may be needed for a successful model.</p>
     <p>Two cameras are almost always better than one, as they provide more depth knowledge and situational awareness, however this comes at the cost of increased training time.</p>
-    <p>It can be beneficial to split training sessions into 25 episode increments. Anything more and the recording program begins to slow down substantially.</p>
+    <p>It can be beneficial to split training sessions into 25 episode increments. Anything more and the recording program begins to slow down substantially. No two datasets can have the same name. This means that if commbining individual sessions, it is useful to add a "_#" suffix.</p>
     
     <p>Datasets can be merged using the CLI command:</p>
-    <pre><code>lerobot-edit-dataset     --repo_id lerobot/pusht_merged     --operation.type merge     --operation.repo_ids "['lerobot/pusht_train', 'lerobot/pusht_val']"</code><button class="copy-btn">Copy</button></pre>
+    <pre><code>lerobot-edit-dataset \
+    --repo_id <span class="hl-hf-user"></span>/<span class="hl-ds-name"></span>_total \
+    --operation.type merge \
+    --operation.repo_ids "['<span class="hl-hf-user"></span>/<span class="hl-ds-name"></span>_1', '<span class="hl-hf-user"></span>/<span class="hl-ds-name"></span>_2']"</code><button class="copy-btn">Copy</button></pre>
 
     <p>When trying to build a resilient model, it is important to introduce variability to anything that is not important during training. This includes altering the background, adding new items to a table, etc.</p>
     <p>For example, if there is a sticky note on the wall, it may be that the model assigns a high weight to that sticky note because it never realizes the sticky note isn’t important. Once trained, if the sticky note is removed, however, the model would fail in this scenario.</p>
@@ -215,12 +372,28 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
     <h2>Accessing Dataset</h2>
     <p>To access the recorded dataset, LeRobot automatically saves it into the computers <code>/.cache</code> folder under huggingface and the <code>repo.id</code> specified. You can either move this file for training manually or upload it to the HuggingFace Hub.</p>
     <p>This process is automatic if trained while connected to WiFi, however can be done manually using:</p>
-    <pre><code>hf upload ${HF_USER}/record-test ~/.cache/huggingface/lerobot/{repo-id} --repo-type dataset</code><button class="copy-btn">Copy</button></pre>
+    <pre><code>hf upload <span class="hl-hf-user"></span>/<span class="hl-ds-name"></span> ~/.cache/huggingface/lerobot/<span class="hl-hf-user"></span>/<span class="hl-ds-name"></span> --repo-type dataset</code><button class="copy-btn">Copy</button></pre>
 
     <hr>
 
     <h2>Training Model from Dataset</h2>
-    <pre><code>lerobot-train   --dataset.repo_id=${HF_USER}/so101_test   --policy.type=act   --output_dir=outputs/train/act_so101_test   --job_name=act_so101_test   --policy.device=cuda   --wandb.enable=false   --policy.repo_id=${HF_USER}/my_policy</code><button class="copy-btn">Copy</button></pre>
+    <p class="headings">
+        Now we will begin to discuss how to actually train the model from a pre-made dataset. This command begins the computationally intensive process of training the AI model. 
+    </p>
+
+    <div class="local-config">
+      <p class="int-head">Choose a name for the final model</p>
+        <div class="input-group"><label>Output Policy Name</label><input type="text" class="sync-input" data-var="policy" value="my_policy"></div>
+    </div>
+
+    <pre><code>lerobot-train \
+  --dataset.repo_id=<span class="hl-hf-user"></span>/<span class="hl-ds-name"></span> \
+  --policy.type=act \
+  --output_dir=outputs/train/act_<span class="hl-ds-name"></span> \
+  --job_name=act_<span class="hl-ds-name"></span> \
+  --policy.device=cuda \
+  --wandb.enable=false \
+  --policy.repo_id=<span class="hl-hf-user"></span>/<span class="hl-policy"></span></code><button class="copy-btn">Copy</button></pre>
 
     <h3>Editable fields are:</h3>
     <ul>
@@ -240,7 +413,14 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
     <hr>
 
     <h2>Running the Model</h2>
-    <pre><code>lerobot-rollout   --strategy.type=base   --policy.path=${HF_USER}/my_policy   --robot.type=so100_follower   --robot.port=/dev/ttyACM1   --robot.cameras="{ front: {type: opencv, index_or_path: /dev/video10, width: 640, height: 480, fps: 30}}"   --task="Put lego brick into the transparent box"   --duration=60</code><button class="copy-btn">Copy</button></pre>
+    <pre><code>lerobot-rollout \
+  --strategy.type=base \
+  --policy.path=<span class="hl-hf-user"></span>/<span class="hl-policy"></span> \
+  --robot.type=so100_follower \
+  --robot.port=<span class="hl-r-port"></span> \
+  --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}" \
+  --task="<span class="hl-task"></span>" \
+  --duration=60</code><button class="copy-btn">Copy</button></pre>
     <p>Match these values to the values of the dataset and provide the <code>policy.path</code> as the trained model’s <code>repo.id</code>. This should run inference and you can evaluate the trained model.</p>
 
     <hr>
@@ -250,18 +430,58 @@ pip install -e ".[feetech]"</code><button class="copy-btn">Copy</button></pre>
 </div>
 
 <script>
+
+
+    const allSyncInputs = document.querySelectorAll('.sync-input');
+    const modeToggle = document.getElementById('mode-toggle');
+    const configBoxes = document.querySelectorAll('.local-config');
+
+    function updateAllSpans() {
+        const isInteractive = modeToggle.checked;
+        
+        allSyncInputs.forEach(input => {
+            const varName = input.getAttribute('data-var');
+            let value;
+            
+            if (isInteractive) {
+                // Use actual input value
+                value = input.value || `[${varName.toUpperCase()}]`;
+            } else {
+                // Use placeholder
+                value = `{${varName.toUpperCase()}}`;
+            }
+            
+            document.querySelectorAll(`.hl-${varName}`).forEach(span => {
+                span.innerText = value;
+            });
+        });
+    }
+
+    // Toggle configuration boxes visibility
+    modeToggle.addEventListener('change', () => {
+        const displayStyle = modeToggle.checked ? 'flex' : 'none';
+        configBoxes.forEach(box => box.style.display = displayStyle);
+        updateAllSpans();
+    });
+
+    allSyncInputs.forEach(input => {
+        input.addEventListener('input', updateAllSpans);
+    });
+
+    // Copy Button Logic
     document.querySelectorAll('.copy-btn').forEach(button => {
         button.addEventListener('click', () => {
             const code = button.parentElement.querySelector('code').innerText;
             navigator.clipboard.writeText(code).then(() => {
                 const originalText = button.innerText;
                 button.innerText = 'Copied!';
-                setTimeout(() => {
-                    button.innerText = originalText;
-                }, 2000);
+                setTimeout(() => { button.innerText = originalText; }, 2000);
             });
         });
     });
+
+    // Run once on load
+    updateAllSpans();
 </script>
 
 </body>
